@@ -1,3 +1,5 @@
+
+
 var gl;
 function initGL(canvas) {
     try {
@@ -148,7 +150,7 @@ function initBuffers() {
     gl.bindBuffer(gl.ARRAY_BUFFER, bodyVertexColorBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorCoordData), gl.STATIC_DRAW);
     ///Change this to 4 to make block colour defined above by a, b, c and d variables.
-    bodyVertexColorBuffer.itemSize = 3;
+    bodyVertexColorBuffer.itemSize = 2;
     //////////////////
     bodyVertexColorBuffer.numItems = colorCoordData.length / 2;
     bodyVertexPositionBuffer = gl.createBuffer();
@@ -172,18 +174,27 @@ function initBuffers() {
 
 /////////////////////////////////////////////////////////////////////////////
 
+var cameraPerspective = mat4.create()
+mat4.identity(cameraPerspective);
 
 function drawScene() {
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
-    ;
+
 
     //TODO////FOR EACH BODY TYPE OUTSIDE OF FOR EACH INSTANCE OF BODY (STORED IN BODIESVERTEXPOSITIONBUFFER)
 
     particles.forEach(function (particle) {
-      mat4.identity(mvMatrix)
+      mat4.identity(mvMatrix);
+
+      mat4.translate(mvMatrix, [0, 0, centre + 1])
+      mat4.rotate(mvMatrix, -xTotalRotation, [0, 1, 0])
+      mat4.rotate(mvMatrix, -yTotalRotation, [1, 0, 0])
+      mat4.translate(mvMatrix, [0, 0, -centre - 1]);
+
       mat4.translate(mvMatrix, particle.position);
+
       mvPushMatrix();
       mat4.rotate(mvMatrix, degToRad(rbody), particle.rotation);
       gl.bindBuffer(gl.ARRAY_BUFFER, bodiesVertexPositionBuffer[0]);
@@ -198,7 +209,17 @@ function drawScene() {
 
     gravityMasses.forEach(function (gravityMass) {
       mat4.identity(mvMatrix)
+
+      // This works in reverse. If I want to move towards something, rotate and move back away then I do the
+      // steps in reverse for the translation matrix. Move away, rotate the other way, and move in.
+
+      mat4.translate(mvMatrix, [0, 0, centre + 1]);
+      mat4.rotate(mvMatrix, -xTotalRotation, [0, 1, 0]);
+      mat4.rotate(mvMatrix, -yTotalRotation, [1, 0, 0]);
+      mat4.translate(mvMatrix, [0, 0, -centre - 1]);
+
       mat4.translate(mvMatrix, gravityMass.position);
+
       mvPushMatrix();
       mat4.rotate(mvMatrix, degToRad(rbody), gravityMass.rotation);
       gl.bindBuffer(gl.ARRAY_BUFFER, bodiesVertexPositionBuffer[2]);

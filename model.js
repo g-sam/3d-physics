@@ -6,10 +6,14 @@ var bodiesVertexPositionBuffer = [];
 var bodiesVertexColorBuffer = [];
 var bodiesVertexIndexBuffer = [];
 
+var centre = -50;
+
 var particles = [];
 var gravityMasses = [];
 var origins = [];
+var objects = [];
 var types = [];
+
 
 
 function type(name, mass, rotation, color, radius) {
@@ -49,19 +53,14 @@ function gravityMass(mass, position, rotation, velocity, color, radius) {
   this.radius = radius;
 }
 
-types.push(new type("orbitalBodyOne", 100, [0 , 1, 0], [0 , 0, 1, 1], 0.5));
+types.push(new type("orbitalBodyOne", 100, [0 , 1, 0], [0 , 0, 1, 1], 0.2));
 types.push(new type("orbitalBodyTwo", 100, [0 , 1, 0], [1 , 0, 1, 1], 0.5));
 types.push(new type("massiveBodyOne", 100000, [0 , 1, 0], [1 , 1, 0, 1], 2));
 types.push(new type("massiveBodyTwo", 1000000, [0 , 1, 0], [1 , 1, 0, 1], 2));
 
 
-//particles.push(new particle(10000, [2.5, 0, -15], [0 , 1, 0], [1 , 0, 0], [0 , 0, 0], [1 , 0, 1, 1], 0.1))
-//particles.push(new particle(10000, [-2.5, 0, -15], [0 , 1, 0], [1 , 0, 0], [0 , 0, 0], [1 , 0, 1, 1], 0.1))
-particles.push(new particle(10000, [0, 2.5, -50], [0 , 1, 0], [1 , 0, 0], [1 , 0, 1, 1], 0.1))
-particles.push(new particle(10000, [0, -2.5, -50], [0 , 1, 1], [0 , 0, 1], [1 , 0, 1, 1], 0.1))
-
 function newParticle() {
-  var standardVel = [1 , 0, 0];
+  var standardVel = [0.9 , 0, 0];
   var magnitude = Math.sqrt(Math.pow(standardVel[0], 2) + Math.pow(standardVel[1], 2) + Math.pow(standardVel[2], 2));
   var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
   var spread = Math.PI / 10;
@@ -73,9 +72,12 @@ function newParticle() {
     return n * magnitude;
   });
 
-  particles.push(new particle(10000, [0, 5, -50], [0 , 1, 0], velocity, [1 , 0, 1, 1], 0.1))
+  particles.push(new particle(10000, [0, 5, -50], [0 , 1, 0], velocity, [1 , 0, 1, 1], 0.1));
+  objects.push(new particle(10000, [0, 5, -50], [0 , 1, 0], velocity, [1 , 0, 1, 1], 0.1));
 }
-gravityMasses.push(new gravityMass(100000, [0, 0, -50], [0 , 1, 0], [1 , 1, 1], [1 , 1, 0, 1], 1))
+
+gravityMasses.push(new gravityMass(100000, [0, 0, centre], [0 , 1, 0], [1 , 1, 1], [1 , 1, 0, 1], 1));
+objects.push(new gravityMass(100000, [0, 0, centre], [0 , 1, 0], [1 , 1, 1], [1 , 1, 0, 1], 1));
 // gravityMasses.push(new gravityMass(1000000, [-1.5, 0, -15], [0 , 1, 0], [1 , 1, 1], [0 , 0, 0], [1 , 1, 0, 1], 2))
 
 function createOrigins() {
@@ -139,12 +141,27 @@ var rbody = 0;
 var secondFraction = 0;
 var lastEmission = 0;
 var lastTime = 0;
+var xCameraRotationPerSecond = Math.PI/10 ;
+var xCameraRotation = 0;
+var xTotalRotation = 0;
+
+var yCameraRotation = 0;
+var yTotalRotation = 0;
+
 function animate() {
     var timeNow = new Date().getTime();
     if (lastTime != 0) {
         var elapsed = timeNow - lastTime;
           rbody -= (75 * elapsed) / 1000.0;
           secondFraction = elapsed / 1000.0;
+          xCameraRotation = xCameraRotationPerSecond * elapsed / 1000;
+          xTotalRotation += xCameraRotation;
+          // var yCameraRotationPerSecond = Math.random() * Math.PI / 50 ;
+          // var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+          // yCameraRotation = plusOrMinus * yCameraRotationPerSecond * elapsed / 1000;
+          // yTotalRotation += yCameraRotation;
+
+
     }
     if (timeNow - lastEmission > 1000) {
       newParticle();
