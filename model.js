@@ -51,26 +51,44 @@ function gravityMass(mass, position, rotation, velocity, color, radius) {
   this.radius = radius;
 }
 
-types.push(new type("orbitalBodyOne", 100, [0 , 1, 0], [0 , 0, 1, 1], 0.2));
+types.push(new type("orbitalBodyOne", 100, [0 , 1, 0], [1 , 1, 1, 1], 0.2));
 types.push(new type("orbitalBodyTwo", 100, [0 , 1, 0], [1 , 0, 1, 1], 0.5));
-types.push(new type("massiveBodyOne", 100000, [0 , 1, 0], [1 , 1, 0, 1], 2));
-types.push(new type("massiveBodyTwo", 1000000, [0 , 1, 0], [1 , 1, 0, 1], 2));
+types.push(new type("massiveBodyOne", 100000, [0 , 1, 0], [0 , 0, 1, 1], 2));
+types.push(new type("massiveBodyTwo", 1000000, [0 , 1, 0], [1 , 0, 0, 1], 2));
 
 
 function newParticle() {
-  var standardVel = [0.8 , 0, 0];
+  var standardVel = [0 , 0, 0.85];
   var magnitude = Math.sqrt(Math.pow(standardVel[0], 2) + Math.pow(standardVel[1], 2) + Math.pow(standardVel[2], 2));
+  vec3.normalize(standardVel);
   var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
   var spread = Math.PI / 10;
-  var theta = Math.random() * plusOrMinus * spread / 2;
-  var phi = (Math.PI / 2) - (Math.random() * plusOrMinus * spread / 2);
-  var rho = 1;
-  var cartesian = [Math.cos(theta) * Math.sin(phi), Math.sin(theta) * Math.sin(phi), Math.cos(phi)];
+  var theta = Math.atan2(standardVel[1], standardVel[0]);
+  var phi = Math.acos(standardVel[2], magnitude);
+  var thetaSpread = Math.random() * plusOrMinus * spread / 2;
+  var phiSpread = (Math.random() * plusOrMinus * spread / 2);
+  var cartesian = [Math.cos(theta + thetaSpread) * Math.sin(phi + phiSpread), Math.sin(theta + thetaSpread) * Math.sin(phi + phiSpread), Math.cos(phi + phiSpread)];
   var velocity = cartesian.map(function(n) {
     return n * magnitude;
   });
 
   particles.push(new particle(10000, [0, 5, -50], [0 , 1, 0], velocity, [1 , 0, 1, 1], 0.1))
+
+  var standardVel = [2, 0, 0];
+  var magnitude = Math.sqrt(Math.pow(standardVel[0], 2) + Math.pow(standardVel[1], 2) + Math.pow(standardVel[2], 2));
+  vec3.normalize(standardVel);
+  var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+  var spread = Math.PI / 10;
+  var theta = Math.atan2(standardVel[1], standardVel[0]);
+  var phi = Math.acos(standardVel[2], magnitude);
+  var thetaSpread = Math.random() * plusOrMinus * spread / 2;
+  var phiSpread = (Math.random() * plusOrMinus * spread / 2);
+  var cartesian = [Math.cos(theta + thetaSpread) * Math.sin(phi + phiSpread), Math.sin(theta + thetaSpread) * Math.sin(phi + phiSpread), Math.cos(phi + phiSpread)];
+  var velocity = cartesian.map(function(n) {
+    return n * magnitude;
+  });
+
+  particles.push(new particle(100000, [0, 10, -50], [0 , 1, 0], velocity, [1 , 0, 1, 1], 0.1))
 }
 
 gravityMasses.push(new gravityMass(100000, [0, 0, centre], [0 , 1, 0], [1 , 1, 1], [1 , 1, 0, 1], 1))
@@ -138,6 +156,7 @@ var secondFraction = 0;
 var lastEmission = 0;
 var lastTime = 0;
 var xCameraRotationPerSecond = Math.PI/10 ;
+//var xCameraRotationPerSecond = 0 ;
 var xCameraRotation = 0;
 var xTotalRotation = 0;
 
@@ -152,10 +171,10 @@ function animate() {
           secondFraction = elapsed / 1000.0;
           xCameraRotation = xCameraRotationPerSecond * elapsed / 1000;
           xTotalRotation += xCameraRotation;
-          // var yCameraRotationPerSecond = Math.random() * Math.PI / 50 ;
-          // var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-          // yCameraRotation = plusOrMinus * yCameraRotationPerSecond * elapsed / 1000;
-          // yTotalRotation += yCameraRotation;
+            var yCameraRotationPerSecond = Math.random() * Math.PI / 50 ;
+            var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+            yCameraRotation = plusOrMinus * yCameraRotationPerSecond * elapsed / 1000;
+            yTotalRotation += yCameraRotation;
 
 
     }
