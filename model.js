@@ -11,9 +11,7 @@ var centre = -50;
 var particles = [];
 var gravityMasses = [];
 var origins = [];
-var objects = [];
 var types = [];
-
 
 
 function type(name, mass, rotation, color, radius) {
@@ -60,7 +58,7 @@ types.push(new type("massiveBodyTwo", 1000000, [0 , 1, 0], [1 , 1, 0, 1], 2));
 
 
 function newParticle() {
-  var standardVel = [0.9 , 0, 0];
+  var standardVel = [0.8 , 0, 0];
   var magnitude = Math.sqrt(Math.pow(standardVel[0], 2) + Math.pow(standardVel[1], 2) + Math.pow(standardVel[2], 2));
   var plusOrMinus = Math.random() < 0.5 ? -1 : 1;
   var spread = Math.PI / 10;
@@ -72,12 +70,10 @@ function newParticle() {
     return n * magnitude;
   });
 
-  particles.push(new particle(10000, [0, 5, -50], [0 , 1, 0], velocity, [1 , 0, 1, 1], 0.1));
-  objects.push(new particle(10000, [0, 5, -50], [0 , 1, 0], velocity, [1 , 0, 1, 1], 0.1));
+  particles.push(new particle(10000, [0, 5, -50], [0 , 1, 0], velocity, [1 , 0, 1, 1], 0.1))
 }
 
-gravityMasses.push(new gravityMass(100000, [0, 0, centre], [0 , 1, 0], [1 , 1, 1], [1 , 1, 0, 1], 1));
-objects.push(new gravityMass(100000, [0, 0, centre], [0 , 1, 0], [1 , 1, 1], [1 , 1, 0, 1], 1));
+gravityMasses.push(new gravityMass(100000, [0, 0, centre], [0 , 1, 0], [1 , 1, 1], [1 , 1, 0, 1], 1))
 // gravityMasses.push(new gravityMass(1000000, [-1.5, 0, -15], [0 , 1, 0], [1 , 1, 1], [0 , 0, 0], [1 , 1, 0, 1], 2))
 
 function createOrigins() {

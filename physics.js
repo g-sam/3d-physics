@@ -188,10 +188,10 @@ function drawScene() {
     particles.forEach(function (particle) {
       mat4.identity(mvMatrix);
 
-      mat4.translate(mvMatrix, [0, 0, centre + 1])
+      mat4.translate(mvMatrix, [0, 0, centre])
       mat4.rotate(mvMatrix, -xTotalRotation, [0, 1, 0])
       mat4.rotate(mvMatrix, -yTotalRotation, [1, 0, 0])
-      mat4.translate(mvMatrix, [0, 0, -centre - 1]);
+      mat4.translate(mvMatrix, [0, 0, -centre]);
 
       mat4.translate(mvMatrix, particle.position);
 
@@ -213,10 +213,10 @@ function drawScene() {
       // This works in reverse. If I want to move towards something, rotate and move back away then I do the
       // steps in reverse for the translation matrix. Move away, rotate the other way, and move in.
 
-      mat4.translate(mvMatrix, [0, 0, centre + 1]);
+      mat4.translate(mvMatrix, [0, 0, centre]);
       mat4.rotate(mvMatrix, -xTotalRotation, [0, 1, 0]);
       mat4.rotate(mvMatrix, -yTotalRotation, [1, 0, 0]);
-      mat4.translate(mvMatrix, [0, 0, -centre - 1]);
+      mat4.translate(mvMatrix, [0, 0, -centre]);
 
       mat4.translate(mvMatrix, gravityMass.position);
 
