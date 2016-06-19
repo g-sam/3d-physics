@@ -49,9 +49,9 @@ function gravityMass(mass, position, rotation, velocity, color, radius) {
   this.radius = radius;
 }
 
-types.push(new type("orbitalBodyOne", 100, [0 , 1, 0], [0 , 0, 1, 1], 0.1));
+types.push(new type("orbitalBodyOne", 100, [0 , 1, 0], [0 , 0, 1, 1], 0.5));
 types.push(new type("orbitalBodyTwo", 100, [0 , 1, 0], [1 , 0, 1, 1], 0.5));
-types.push(new type("massiveBodyOne", 100000, [0 , 1, 0], [1 , 1, 0, 1], 1));
+types.push(new type("massiveBodyOne", 100000, [0 , 1, 0], [1 , 1, 0, 1], 2));
 types.push(new type("massiveBodyTwo", 1000000, [0 , 1, 0], [1 , 1, 0, 1], 2));
 
 
