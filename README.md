@@ -10,3 +10,5 @@ Has functioning spread (random spread of initial velocity of particles) and pann
 
 Next - create user movement input
 Random spread of intial position.
+
+Use star wars API to create universe
